@@ -25,3 +25,7 @@ myAPI = {1 :
 @app.get("/api")
 def get_api(api_id: int):
     return myAPI[api_id]
+
+@app.get("/health")
+def health():
+    return {"status": "OK"}
