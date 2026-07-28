@@ -1,7 +1,5 @@
-from asyncio import Task
-
 from fastapi import FastAPI
-from pydantic import BaseModel
+
 
 app = FastAPI()
 
@@ -54,12 +52,6 @@ def get_task(task_id: int):
         return tasks[task_id -1]
 
 #Stage 3 — Create: POST a new task
-
-#class Task(BaseModel):
-    #id: int = len(tasks) + 1
-    #title: str
-    #description: str
-    #completed: bool
 
 @app.post("/tasks") 
 def create_task(title: str, description: str, completed: bool):
