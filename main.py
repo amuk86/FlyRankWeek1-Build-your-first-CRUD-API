@@ -29,3 +29,25 @@ def get_api(api_id: int):
 @app.get("/health")
 def health():
     return {"status": "OK"}
+
+#Sage 2 — Create a new endpoint to return a list of tasks
+
+tasks = [
+    {"id": 1, "title": "Task 1", "COOK DINNER": "This is task 1", "completed": False},
+    {"id": 2, "title": "Task 2", "WASH CLOTHES": "This is task 2", "completed": True},
+    {"id": 3, "title": "Task 3", "CLEAN HOUSE": "This is task 3", "completed": False}
+]
+
+@app.get("/tasks")
+def get_tasks():
+    return tasks
+
+@app.get("/tasks/{task_id}")
+def get_task(task_id: int):
+    if task_id == 0 or task_id > len(tasks):
+        return { "error": f"Task {task_id} not found" }
+    else:
+        return tasks[task_id -1]
+
+
+            
