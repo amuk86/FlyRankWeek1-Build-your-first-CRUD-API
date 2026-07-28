@@ -1,4 +1,7 @@
+from asyncio import Task
+
 from fastapi import FastAPI
+from pydantic import BaseModel
 
 app = FastAPI()
 
@@ -7,6 +10,7 @@ app = FastAPI()
 #post - create new information about the API
 #delete - delete information about the API
 #python -m uvicorn main:app --port 8000 --reload
+
 
 #Stage 0 — Hello, server
 @app.get("/")
@@ -33,9 +37,9 @@ def health():
 #Sage 2 — Create a new endpoint to return a list of tasks
 
 tasks = [
-    {"id": 1, "title": "Task 1", "COOK DINNER": "This is task 1", "completed": False},
-    {"id": 2, "title": "Task 2", "WASH CLOTHES": "This is task 2", "completed": True},
-    {"id": 3, "title": "Task 3", "CLEAN HOUSE": "This is task 3", "completed": False}
+    {"id": 1, "title": "Task 1", "description": "This is task 1", "completed": False},
+    {"id": 2, "title": "Task 2", "description": "This is task 2", "completed": True},
+    {"id": 3, "title": "Task 3", "description": "This is task 3", "completed": False}
 ]
 
 @app.get("/tasks")
@@ -49,5 +53,23 @@ def get_task(task_id: int):
     else:
         return tasks[task_id -1]
 
+#Stage 3 — Create: POST a new task
 
-            
+#class Task(BaseModel):
+    #id: int = len(tasks) + 1
+    #title: str
+    #description: str
+    #completed: bool
+
+@app.post("/tasks") 
+def create_task(title: str, description: str, completed: bool):
+    if not title or not description:
+        return 400
+    else:
+        id = len(tasks) + 1
+        task = {"id": id, "title": title, "description": description, "completed": completed}
+        tasks.append(task)
+        return 201
+
+
+
