@@ -1,4 +1,6 @@
 from fastapi import FastAPI
+from typing import Optional
+from pydantic import BaseModel
 
 
 app = FastAPI()
@@ -13,7 +15,7 @@ app = FastAPI()
 #Stage 0 — Hello, server
 @app.get("/")
 
-def index():
+def index(): 
     return {"message": "Hello World!"}
 
 #Stage 1 — Create a new endpoint
@@ -62,6 +64,45 @@ def create_task(title: str, description: str, completed: bool):
         task = {"id": id, "title": title, "description": description, "completed": completed}
         tasks.append(task)
         return 201
+
+#Stage 4 — Update: Update & Delete
+class raplaceTasks(BaseModel):
+    id: int
+    title: Optional[str] = None
+    description: Optional[str] = None 
+    completed : Optional[bool] = None
+
+#In the json body you need the id
+@app.put("/replaceTask")
+def replaceTask(id: int, taskDetails: raplaceTasks):
+    for task in tasks:
+        if task["id"] == id:
+            if taskDetails.title is not None:
+                task["title"] = taskDetails.title
+            if taskDetails.description is not None:
+                task["description"] = taskDetails.description
+            if taskDetails.completed is not None:
+                task["completed"] = taskDetails.completed
+            return task
+    return task
+
+#Delete
+from fastapi import Response, HTTPException
+
+@app.delete("/removeTask")
+def removeTask(id: int):
+    for task in tasks:
+        if task["id"] == id:
+            tasks.remove(task)
+            return Response(status_code=204)
+    raise HTTPException(status_code=404, detail="Task not found")
+    
+    
+
+       
+         
+
+       
 
 
 
