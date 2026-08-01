@@ -55,7 +55,7 @@ def get_task(task_id: int):
 
 #Stage 3 — Create: POST a new task
 
-@app.post("/tasks") 
+@app.post("/createTasks") 
 def create_task(title: str, description: str, completed: bool):
     if not title or not description:
         return 400
